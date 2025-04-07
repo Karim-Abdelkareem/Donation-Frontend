@@ -5,7 +5,7 @@ import { Navigation } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
-import "../styles/donationsSlider.css";
+import "../styles/DonationsSlider.css";
 
 import DonationCard from "./DonationCard";
 import { Link } from "react-router";
