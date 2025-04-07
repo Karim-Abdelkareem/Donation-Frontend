@@ -1,0 +1,35 @@
+.donations-slider {
+  direction: rtl;
+  position: relative;
+}
+
+/* Custom Navigation Buttons for Donations Slider */
+.donations-next,
+.donations-prev {
+  position: absolute;
+  transform: translateY(-45%);
+  width: 60px !important;
+  height: 100% !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  cursor: pointer;
+  border: none !important;
+}
+
+.donations-next {
+  right: 0px !important;
+  background: linear-gradient(to left, white 40%, transparent) !important;
+}
+
+.donations-prev {
+  left: 0px !important;
+  background: linear-gradient(to right, white 40%, transparent) !important;
+}
+
+.donations-next::after,
+.donations-prev::after {
+  font-size: 18px;
+  color: black !important;
+}

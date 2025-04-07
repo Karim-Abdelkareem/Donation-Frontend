@@ -1,0 +1,38 @@
+
+span.swiper-pagination-bullet.text-white.bg-white.text-2xl.swiper-pagination-bullet-active {
+  background: white !important;
+  width: 30px !important;
+  border-radius: 0 !important;
+  height: 3px !important;
+}
+
+span.swiper-pagination-bullet.text-white.bg-white.text-2xl {
+  width: 30px !important;
+  border-radius: 0 !important;
+  height: 3px !important;
+}
+
+/* Custom Navigation Buttons for Hero Carousel */
+.carousel-prev,
+.carousel-next {
+  top: 90% !important;
+  width: 35px !important;
+  color: white !important;
+  border: 1px solid;
+  padding: 0 20px !important;
+  border-radius: 6px;
+}
+
+.carousel-prev::after,
+.carousel-next::after {
+  font-size: 16px !important;
+}
+
+.carousel-prev {
+  left: var(--swiper-navigation-sides-offset, 180px) !important;
+  right: auto !important;
+}
+
+.carousel-next {
+  left: var(--swiper-navigation-sides-offset, 70px) !important;
+}
