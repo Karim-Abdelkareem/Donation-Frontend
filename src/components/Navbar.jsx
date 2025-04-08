@@ -8,7 +8,7 @@ export default function Navbar() {
     { path: "", label: "الرئيسية" },
     { path: "projects", label: "فرص التبرع" },
     { path: "services", label: "طلب تبرع" },
-    { path: "addection", label: "معالجة الادمان" },
+    // { path: "addection", label: "معالجة الادمان" },
   ];
   const [search, setSearch] = useState(false);
   const { isAuthenticated, logout, user } = useAuth();

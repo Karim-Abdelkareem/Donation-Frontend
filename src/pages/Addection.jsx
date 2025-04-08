@@ -3,6 +3,7 @@ import { api } from "../services/api";
 import { toast } from "react-hot-toast";
 import { format, addDays, differenceInDays } from "date-fns";
 import { ar } from "date-fns/locale";
+import AiChat from "../components/AiChat";
 
 const ADDICTION_CATEGORIES = [
   { id: "smoking", label: "التدخين", defaultTarget: 30 },
@@ -171,229 +172,237 @@ export default function AddictionTracker() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 mt-20">
-      <h1 className="text-3xl font-bold text-center text-emerald-700 mb-8">
-        تتبع التعافي
-      </h1>
+    <div className="relative">
+      <AiChat
+        currentAddiction={ADDICTION_CATEGORIES.find(
+          (c) => c.id === selectedCategory
+        )}
+        streak={getCurrentAddiction()?.streak || 0}
+      />
+      <div className="max-w-4xl mx-auto p-6 mt-20">
+        <h1 className="text-3xl font-bold text-center text-emerald-700 mb-8">
+          تتبع التعافي
+        </h1>
 
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-2 flex-wrap">
-          {addictions.map((addiction) => (
-            <button
-              key={addiction.category}
-              onClick={() => {
-                setSelectedCategory(addiction.category);
-                setNotes(addiction.notes || "");
-              }}
-              className={`px-4 py-2 rounded-md ${
-                selectedCategory === addiction.category
-                  ? "bg-emerald-700 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              {
-                ADDICTION_CATEGORIES.find((c) => c.id === addiction.category)
-                  ?.label
-              }
-            </button>
-          ))}
-        </div>
-        <div className="flex gap-2">
-          {addictions.length < ADDICTION_CATEGORIES.length && (
-            <button
-              onClick={() => setShowAddForm(true)}
-              className="px-4 py-2 rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-            >
-              + إضافة
-            </button>
-          )}
-          {addictions.length > 0 && (
-            <button
-              onClick={() => setShowRemoveForm(true)}
-              className="px-4 py-2 rounded-md bg-red-100 text-red-700 hover:bg-red-200"
-            >
-              - إزالة
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Add Form */}
-      {showAddForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-bold mb-4">إضافة نوع جديد</h2>
-            <select
-              className="w-full p-2 border rounded mb-4"
-              onChange={(e) => handleAddAddiction(e.target.value)}
-            >
-              <option value="">اختر النوع</option>
-              {ADDICTION_CATEGORIES.filter(
-                (cat) => !addictions.some((a) => a.category === cat.id)
-              ).map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.label}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={() => setShowAddForm(false)}
-              className="w-full bg-gray-200 text-gray-700 p-2 rounded"
-            >
-              إلغاء
-            </button>
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex gap-2 flex-wrap">
+            {addictions.map((addiction) => (
+              <button
+                key={addiction.category}
+                onClick={() => {
+                  setSelectedCategory(addiction.category);
+                  setNotes(addiction.notes || "");
+                }}
+                className={`px-4 py-2 rounded-md ${
+                  selectedCategory === addiction.category
+                    ? "bg-emerald-700 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {
+                  ADDICTION_CATEGORIES.find((c) => c.id === addiction.category)
+                    ?.label
+                }
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            {addictions.length < ADDICTION_CATEGORIES.length && (
+              <button
+                onClick={() => setShowAddForm(true)}
+                className="px-4 py-2 rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+              >
+                + إضافة
+              </button>
+            )}
+            {addictions.length > 0 && (
+              <button
+                onClick={() => setShowRemoveForm(true)}
+                className="px-4 py-2 rounded-md bg-red-100 text-red-700 hover:bg-red-200"
+              >
+                - إزالة
+              </button>
+            )}
           </div>
         </div>
-      )}
 
-      {/* Remove Form */}
-      {showRemoveForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-bold mb-4">إزالة نوع</h2>
-            <div className="space-y-2 mb-4">
-              {addictions.map((addiction) => (
-                <button
-                  key={addiction.category}
-                  onClick={() => handleRemoveAddiction(addiction.category)}
-                  className="w-full text-left p-3 border rounded hover:bg-red-50 flex justify-between items-center"
-                >
-                  <span>
-                    {
-                      ADDICTION_CATEGORIES.find(
-                        (c) => c.id === addiction.category
-                      )?.label
-                    }
-                  </span>
-                  <span className="text-red-600">×</span>
-                </button>
-              ))}
+        {/* Add Form */}
+        {showAddForm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg w-96">
+              <h2 className="text-xl font-bold mb-4">إضافة نوع جديد</h2>
+              <select
+                className="w-full p-2 border rounded mb-4"
+                onChange={(e) => handleAddAddiction(e.target.value)}
+              >
+                <option value="">اختر النوع</option>
+                {ADDICTION_CATEGORIES.filter(
+                  (cat) => !addictions.some((a) => a.category === cat.id)
+                ).map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={() => setShowAddForm(false)}
+                className="w-full bg-gray-200 text-gray-700 p-2 rounded"
+              >
+                إلغاء
+              </button>
             </div>
-            <button
-              onClick={() => setShowRemoveForm(false)}
-              className="w-full bg-gray-200 text-gray-700 p-2 rounded"
-            >
-              إلغاء
-            </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {selectedCategory && getCurrentAddiction() && (
-        <>
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <div className="text-lg font-semibold">
-                  أيام متتالية:{" "}
-                  <span className="text-emerald-600">
-                    {getCurrentAddiction().streak}
-                  </span>
-                </div>
-                <div className="text-sm text-gray-500">
-                  هدفك: {getCurrentAddiction().targetDays} يوم
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleCheckIn(selectedCategory)}
-                  disabled={
-                    getCurrentAddiction().lastCheckIn &&
-                    format(
-                      new Date(getCurrentAddiction().lastCheckIn),
-                      "yyyy-MM-dd"
-                    ) === format(new Date(), "yyyy-MM-dd")
-                  }
-                  className="bg-emerald-700 text-white px-4 py-2 rounded-md hover:bg-emerald-800 disabled:opacity-50"
-                >
-                  تسجيل اليوم
-                </button>
-                <button
-                  onClick={() => handleReset(selectedCategory)}
-                  className="bg-red-100 text-red-700 px-4 py-2 rounded-md hover:bg-red-200"
-                >
-                  إعادة تعيين
-                </button>
-              </div>
-            </div>
-
-            {/* Progress Bar */}
-            <div className="mb-6">
-              <div className="flex justify-between text-sm mb-1">
-                <span>التقدم</span>
-                <span>
-                  {Math.round(calculateProgress(getCurrentAddiction()))}%
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div
-                  className="bg-emerald-600 h-2.5 rounded-full"
-                  style={{
-                    width: `${calculateProgress(getCurrentAddiction())}%`,
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Calendar */}
-            <div className="grid grid-cols-7 gap-2">
-              {generateCalendarDays(getCurrentAddiction().days).map(
-                (day, index) => (
-                  <div
-                    key={index}
-                    className={`aspect-square rounded-lg flex items-center justify-center text-sm font-medium ${
-                      day.isChecked
-                        ? "bg-emerald-100 text-emerald-800 border-2 border-emerald-500"
-                        : "bg-gray-100 text-gray-500"
-                    }`}
+        {/* Remove Form */}
+        {showRemoveForm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg w-96">
+              <h2 className="text-xl font-bold mb-4">إزالة نوع</h2>
+              <div className="space-y-2 mb-4">
+                {addictions.map((addiction) => (
+                  <button
+                    key={addiction.category}
+                    onClick={() => handleRemoveAddiction(addiction.category)}
+                    className="w-full text-left p-3 border rounded hover:bg-red-50 flex justify-between items-center"
                   >
-                    {format(day.date, "d", { locale: ar })}
-                  </div>
-                )
-              )}
+                    <span>
+                      {
+                        ADDICTION_CATEGORIES.find(
+                          (c) => c.id === addiction.category
+                        )?.label
+                      }
+                    </span>
+                    <span className="text-red-600">×</span>
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setShowRemoveForm(false)}
+                className="w-full bg-gray-200 text-gray-700 p-2 rounded"
+              >
+                إلغاء
+              </button>
             </div>
           </div>
+        )}
 
-          {/* Achievements and Notes */}
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-xl font-bold mb-4">إنجازاتك</h2>
-              <div className="space-y-4">
-                {getCurrentAddiction().streak >= 1 && (
-                  <div className="flex items-center gap-2 text-emerald-700">
-                    <span className="text-2xl">🌟</span>
-                    <span>أول يوم من التعافي!</span>
+        {selectedCategory && getCurrentAddiction() && (
+          <>
+            <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <div className="text-lg font-semibold">
+                    أيام متتالية:{" "}
+                    <span className="text-emerald-600">
+                      {getCurrentAddiction().streak}
+                    </span>
                   </div>
-                )}
-                {getCurrentAddiction().streak >= 7 && (
-                  <div className="flex items-center gap-2 text-emerald-700">
-                    <span className="text-2xl">🎉</span>
-                    <span>أسبوع من التعافي!</span>
+                  <div className="text-sm text-gray-500">
+                    هدفك: {getCurrentAddiction().targetDays} يوم
                   </div>
-                )}
-                {getCurrentAddiction().streak >= 30 && (
-                  <div className="flex items-center gap-2 text-emerald-700">
-                    <span className="text-2xl">🏆</span>
-                    <span>شهر من التعافي!</span>
-                  </div>
-                )}
-                {getCurrentAddiction().streak >= 90 && (
-                  <div className="flex items-center gap-2 text-emerald-700">
-                    <span className="text-2xl">💪</span>
-                    <span>3 أشهر من التعافي!</span>
-                  </div>
-                )}
-                {calculateProgress(getCurrentAddiction()) >= 100 && (
-                  <div className="flex items-center gap-2 text-emerald-700 font-bold">
-                    <span className="text-2xl">🎯</span>
-                    <span>وصلت إلى هدفك!</span>
-                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleCheckIn(selectedCategory)}
+                    disabled={
+                      getCurrentAddiction().lastCheckIn &&
+                      format(
+                        new Date(getCurrentAddiction().lastCheckIn),
+                        "yyyy-MM-dd"
+                      ) === format(new Date(), "yyyy-MM-dd")
+                    }
+                    className="bg-emerald-700 text-white px-4 py-2 rounded-md hover:bg-emerald-800 disabled:opacity-50"
+                  >
+                    تسجيل اليوم
+                  </button>
+                  <button
+                    onClick={() => handleReset(selectedCategory)}
+                    className="bg-red-100 text-red-700 px-4 py-2 rounded-md hover:bg-red-200"
+                  >
+                    إعادة تعيين
+                  </button>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="mb-6">
+                <div className="flex justify-between text-sm mb-1">
+                  <span>التقدم</span>
+                  <span>
+                    {Math.round(calculateProgress(getCurrentAddiction()))}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                  <div
+                    className="bg-emerald-600 h-2.5 rounded-full"
+                    style={{
+                      width: `${calculateProgress(getCurrentAddiction())}%`,
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Calendar */}
+              <div className="grid grid-cols-7 gap-2">
+                {generateCalendarDays(getCurrentAddiction().days).map(
+                  (day, index) => (
+                    <div
+                      key={index}
+                      className={`aspect-square rounded-lg flex items-center justify-center text-sm font-medium ${
+                        day.isChecked
+                          ? "bg-emerald-100 text-emerald-800 border-2 border-emerald-500"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {format(day.date, "d", { locale: ar })}
+                    </div>
+                  )
                 )}
               </div>
             </div>
-          </div>
-        </>
-      )}
+
+            {/* Achievements and Notes */}
+            <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <h2 className="text-xl font-bold mb-4">إنجازاتك</h2>
+                <div className="space-y-4">
+                  {getCurrentAddiction().streak >= 1 && (
+                    <div className="flex items-center gap-2 text-emerald-700">
+                      <span className="text-2xl">🌟</span>
+                      <span>أول يوم من التعافي!</span>
+                    </div>
+                  )}
+                  {getCurrentAddiction().streak >= 7 && (
+                    <div className="flex items-center gap-2 text-emerald-700">
+                      <span className="text-2xl">🎉</span>
+                      <span>أسبوع من التعافي!</span>
+                    </div>
+                  )}
+                  {getCurrentAddiction().streak >= 30 && (
+                    <div className="flex items-center gap-2 text-emerald-700">
+                      <span className="text-2xl">🏆</span>
+                      <span>شهر من التعافي!</span>
+                    </div>
+                  )}
+                  {getCurrentAddiction().streak >= 90 && (
+                    <div className="flex items-center gap-2 text-emerald-700">
+                      <span className="text-2xl">💪</span>
+                      <span>3 أشهر من التعافي!</span>
+                    </div>
+                  )}
+                  {calculateProgress(getCurrentAddiction()) >= 100 && (
+                    <div className="flex items-center gap-2 text-emerald-700 font-bold">
+                      <span className="text-2xl">🎯</span>
+                      <span>وصلت إلى هدفك!</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
