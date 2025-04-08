@@ -8,6 +8,7 @@ export default function Navbar() {
     { path: "", label: "الرئيسية" },
     { path: "projects", label: "فرص التبرع" },
     { path: "services", label: "طلب تبرع" },
+    { path: "addection", label: "معالجة الادمان" },
   ];
   const [search, setSearch] = useState(false);
   const { isAuthenticated, logout, user } = useAuth();
@@ -16,12 +17,7 @@ export default function Navbar() {
     <>
       <nav className="h-[72px] z-10 flex justify-between sticky top-0 bg-white items-center border-b border-gray-200">
         <div className="px-6 flex gap-16 items-center">
-          <img
-            loading="lazy"
-            className="h-[56px]"
-            src="https://ehsan.sa/ehsan-ui/images/Ehsan-Logo.svg"
-            alt=""
-          />
+          <img loading="lazy" className="w-22" src="/logo.png" alt="" />
           <div className="flex p-6 gap-2">
             {navLinks.map((link) => (
               <Link

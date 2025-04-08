@@ -13,6 +13,7 @@ import Protected from "./components/Protected";
 import Dashboard from "./pages/Dashboard";
 import EditCampaign from "./pages/EditCampaign";
 import AdminProtected from "./components/AdminProtected";
+import Addection from "./pages/Addection";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                 </Protected>
               }
             />
+            <Route path="/addection" element={<Addection />} />
             {/* Admins Routes */}
             <Route
               path="/dashboard"
