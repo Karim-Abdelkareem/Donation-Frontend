@@ -61,7 +61,7 @@ export default function AddictionTracker() {
     if (isAuthenticated) {
       fetchProgress();
     }
-  }, [user._id, isAuthenticated]);
+  }, [user?._id, isAuthenticated]);
 
   // Handle daily check-in
   const handleCheckIn = async (category) => {
