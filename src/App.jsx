@@ -47,7 +47,14 @@ function App() {
               </Protected>
             }
           />
-          <Route path="/addection" element={<Addection />} />
+          <Route
+            path="/addection"
+            element={
+              <Protected>
+                <Addection />
+              </Protected>
+            }
+          />
           {/* Admins Routes */}
           <Route
             path="/dashboard"
