@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 import { format, addDays, differenceInDays } from "date-fns";
 import { ar } from "date-fns/locale";
 import AiChat from "../components/AiChat";
+import { useAuth } from "../context/AuthContext";
 
 const ADDICTION_CATEGORIES = [
   { id: "smoking", label: "التدخين", defaultTarget: 30 },
@@ -37,6 +38,7 @@ export default function AddictionTracker() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showRemoveForm, setShowRemoveForm] = useState(false);
   const [notes, setNotes] = useState("");
+  const { user } = useAuth();
 
   // Fetch user's progress
   useEffect(() => {
@@ -57,7 +59,7 @@ export default function AddictionTracker() {
       }
     };
     fetchProgress();
-  }, []);
+  }, [user._id]);
 
   // Handle daily check-in
   const handleCheckIn = async (category) => {
