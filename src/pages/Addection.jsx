@@ -38,7 +38,7 @@ export default function AddictionTracker() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showRemoveForm, setShowRemoveForm] = useState(false);
   const [notes, setNotes] = useState("");
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   // Fetch user's progress
   useEffect(() => {
@@ -58,8 +58,10 @@ export default function AddictionTracker() {
         setLoading(false);
       }
     };
-    fetchProgress();
-  }, [user._id]);
+    if (isAuthenticated) {
+      fetchProgress();
+    }
+  }, [user._id, isAuthenticated]);
 
   // Handle daily check-in
   const handleCheckIn = async (category) => {
