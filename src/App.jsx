@@ -15,9 +15,31 @@ import EditCampaign from "./pages/EditCampaign";
 import AdminProtected from "./components/AdminProtected";
 import Addection from "./pages/Addection";
 import { BiSupport } from "react-icons/bi";
+import { useEffect, useState } from "react";
 
 function App() {
   const location = useLocation();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const controlNavbar = () => {
+      const currentScrollY = window.scrollY;
+      console.log(currentScrollY);
+
+      if (currentScrollY > lastScrollY) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+    window.addEventListener("scroll", controlNavbar);
+    return () => {
+      window.removeEventListener("scroll", controlNavbar);
+    };
+  }, [lastScrollY]);
+
   return (
     <>
       <Toaster />
@@ -27,10 +49,17 @@ function App() {
           to={"/addection"}
           className={`${
             location.pathname === "/addection" ? "hidden" : "block"
-          }`}
+          } fixed bottom-4 right-4 z-20`}
         >
-          <div className="fixed flex items-center justify-center w-12 h-12 rounded-full bg-emerald-700 bottom-4 right-4 z-20 animate-pulse cursor-pointer">
+          <div className="flex items-center text-white justify-center p-3  rounded-full bg-[#003d6b] cursor-pointer hover:bg-blue-950 transition-all duration-300">
             <BiSupport className="text-2xl text-white" />
+            <p
+              className={`whitespace-nowrap overflow-hidden transition-all duration-500 ${
+                isVisible ? "w-0 opacity-0" : "mr-2 opacity-100"
+              }`}
+            >
+              التعافي من الادمان
+            </p>
           </div>
         </Link>
         <Routes>
