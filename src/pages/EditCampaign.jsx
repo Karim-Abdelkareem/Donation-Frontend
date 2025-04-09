@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { api } from "../services/api";
 import uploadToCloudinary from "../utils/cloudinary";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const categories = [
   "مساعدات إنسانية",
@@ -129,12 +130,20 @@ export default function EditCampaign() {
         title: formData.title,
         description: formData.description,
         goalAmount: formData.goalAmount,
-        currentAmount: formData.currentAmount, 
+        currentAmount: formData.currentAmount,
         category: formData.category,
         proofImages: allImageUrls,
       };
 
-      const response = await api.patch(`/api/donation/${id}`, updateData);
+      const response = await axios.patch(
+        `https://donations-backend-ten.vercel.app/api/donation/${id}`,
+        updateData,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
 
       if (response.data.status === "success") {
         toast.success("تم تحديث الحملة بنجاح!", {
