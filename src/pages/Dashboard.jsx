@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 import { Link } from "react-router";
 import { FaCheck, FaEye, FaRegEdit, FaTrash } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
+import axios from "axios";
 
 export default function Dashboard() {
   const [campaigns, setCampaigns] = useState([]);
@@ -18,7 +19,14 @@ export default function Dashboard() {
   // Fetch campaigns
   const fetchCampaigns = async () => {
     try {
-      const response = await api.get("/api/donation/admin");
+      const response = await axios.get(
+        "https://donations-backend-ten.vercel.app/api/donation/admin",
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
       if (response.data.status === "success") {
         setCampaigns(response.data.data.campaigns);
       }
@@ -33,7 +41,14 @@ export default function Dashboard() {
   // Delete campaign
   const handleDelete = async (id) => {
     try {
-      const response = await api.delete(`/api/donation/${id}`);
+      const response = await axios.delete(
+        `https://donations-backend-ten.vercel.app/api/donation/${id}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
       console.log(response);
 
       if (response.status === 204) {
@@ -49,7 +64,15 @@ export default function Dashboard() {
   //Activate campaign
   const handleActivate = async (id) => {
     try {
-      const response = await api.patch(`/api/donation/${id}/activate`);
+      const response = await axios.patch(
+        `https://donations-backend-ten.vercel.app/api/donation/${id}/activate`,
+        {},
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
       if (response.data.status === "success") {
         const updatedCampaigns = campaigns.map((campaign) =>
           campaign._id === id
@@ -68,7 +91,17 @@ export default function Dashboard() {
   //Deactivate campaign
   const handleDeactivate = async (id) => {
     try {
-      const response = await api.patch(`/api/donation/${id}/deactivate`);
+      const response = await axios.patch(
+        `https://donations-backend-ten.vercel.app/api/donation/${id}/deactivate`,
+        {},
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      console.log(response);
+
       if (response.data.status === "success") {
         const updatedCampaigns = campaigns.map((campaign) =>
           campaign._id === id
@@ -80,6 +113,8 @@ export default function Dashboard() {
         fetchCampaigns();
       }
     } catch (err) {
+      console.log(err);
+
       toast.error(err.response?.data?.message || "فشل في تعطيل الحملة");
     }
   };

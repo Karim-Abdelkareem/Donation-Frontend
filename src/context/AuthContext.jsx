@@ -44,16 +44,31 @@ function AuthProvider({ children }) {
     initalState
   );
 
+  // Update the token check useEffect to handle token expiration
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decoded = jwtDecode(token);
-      dispatch({ type: "LOGIN", payload: decoded });
-    }
+    const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          // Check if token is expired
+          if (decoded.exp * 1000 < Date.now()) {
+            logout();
+          } else {
+            dispatch({ type: "LOGIN", payload: decoded });
+          }
+        } catch (error) {
+          logout();
+        }
+      }
+    };
+
+    checkAuth();
   }, []);
 
   const login = async (formData) => {
     setLoading(true);
+    setError(null); // Clear any previous errors
 
     try {
       const response = await axios.post(
@@ -61,23 +76,33 @@ function AuthProvider({ children }) {
         formData
       );
       const { token } = response.data;
+
+      // Clear any existing data first
+      localStorage.clear();
+
+      // Set new token
       localStorage.setItem("token", token);
       const decoded = jwtDecode(token);
       dispatch({ type: "LOGIN", payload: decoded });
       navigate("/");
-      setLoading(false);
     } catch (err) {
+      setError(err.response?.data?.message || "An error occurred");
+    } finally {
       setLoading(false);
-
-      setError(err.response.data.message);
     }
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    // Clear all localStorage data
+    localStorage.clear();
+
+    // Reset state
     dispatch({ type: "LOGOUT" });
-    navigate("/login");
+
+    // Force clear any cached data
+    window.location.href = "/login";
   };
+
   return (
     <AuthContext.Provider
       value={{

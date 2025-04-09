@@ -5,6 +5,7 @@ import { format, addDays, differenceInDays } from "date-fns";
 import { ar } from "date-fns/locale";
 import AiChat from "../components/AiChat";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 const ADDICTION_CATEGORIES = [
   { id: "smoking", label: "التدخين", defaultTarget: 30 },
@@ -44,7 +45,14 @@ export default function AddictionTracker() {
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const response = await api.get("/api/addiction/progress");
+        const response = await axios.get(
+          "https://donations-backend-ten.vercel.app/api/addiction/progress",
+          {
+            headers: {
+              Authorization: `${localStorage.getItem("token")}`,
+            },
+          }
+        );
         if (response.data.status === "success") {
           setAddictions(response.data.data.addictions);
           if (response.data.data.addictions.length > 0) {
@@ -53,6 +61,8 @@ export default function AddictionTracker() {
           }
         }
       } catch (error) {
+        console.log(error);
+
         toast.error("فشل في جلب البيانات");
       } finally {
         setLoading(false);
@@ -60,6 +70,8 @@ export default function AddictionTracker() {
     };
     if (isAuthenticated) {
       fetchProgress();
+    } else {
+      setLoading(false);
     }
   }, [user?._id, isAuthenticated]);
 
