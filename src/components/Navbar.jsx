@@ -90,7 +90,7 @@ export default function Navbar() {
       </nav>
       {/* search div */}
       <div
-        className={`absolute mt-16 bg-white z-[3] border-b border-gray-200 w-full h-[200px] left-0 transition-all ease-out duration-300 ${
+        className={`fixed mt-16 bg-white z-[3] border-b border-gray-200 w-full h-[200px] left-0 transition-all ease-out duration-300 ${
           search ? "-top-0" : "-top-72"
         }`}
       >

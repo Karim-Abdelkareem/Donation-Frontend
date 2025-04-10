@@ -10,6 +10,7 @@ export default function AiChat({ currentAddiction, streak }) {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const chatContainerRef = useRef(null);
+  const [lastAddiction, setLastAddiction] = useState(null);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -90,18 +91,46 @@ export default function AiChat({ currentAddiction, streak }) {
     }
   };
 
-  // Show initial message when chat opens
+  // Add new effect for initial message when chat opens
   useEffect(() => {
-    if (open && messages.length === 0 && currentAddiction) {
-      setMessages([
-        {
-          text: `مرحباً! أنا هنا لدعمك في رحلة التعافي من ${currentAddiction.label}. 
-              لديك ${streak} يوم من التقدم! كيف يمكنني مساعدتك اليوم؟`,
-          sender: "ai",
-        },
-      ]);
+    if (open && currentAddiction && messages.length === 0) {
+      const welcomeMessage = {
+        text: `مرحباً بك! 👋
+        \nأنا مساعدك في رحلة التعافي من ${currentAddiction.label}.
+        \n${
+          streak > 0
+            ? `أحسنت! لقد حافظت على ${streak} يوم من التقدم. هذا إنجاز رائع! 🌟`
+            : "نحن هنا لدعم بداية رحلتك نحو التعافي. 💪"
+        }
+        \nكيف يمكنني مساعدتك اليوم؟`,
+        sender: "ai",
+      };
+
+      setMessages([welcomeMessage]);
     }
   }, [open, currentAddiction, streak]);
+
+  // Replace the addiction change effect
+  useEffect(() => {
+    if (currentAddiction?.id !== lastAddiction?.id) {
+      setMessages([]); // Clear previous messages
+      setLastAddiction(currentAddiction);
+
+      if (open && currentAddiction) {
+        const switchMessage = {
+          text: `تم تغيير المحادثة إلى ${currentAddiction.label}.
+          \n${
+            streak > 0
+              ? `لديك ${streak} يوم من التقدم في هذا المسار. استمر! 💪`
+              : "دعنا نبدأ رحلة التعافي معاً. 🌟"
+          }`,
+          sender: "ai",
+        };
+
+        setMessages([switchMessage]);
+      }
+    }
+  }, [currentAddiction, streak, open, lastAddiction]);
 
   if (!currentAddiction) return null;
 

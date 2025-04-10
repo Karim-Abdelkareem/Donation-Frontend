@@ -46,7 +46,7 @@ export default function AddictionTracker() {
     const fetchProgress = async () => {
       try {
         const response = await axios.get(
-          "https://donations-backend-ten.vercel.app/api/addiction/progress",
+          `${import.meta.env.VITE_HOST}/api/addiction/progress`,
           {
             headers: {
               Authorization: `${localStorage.getItem("token")}`,
@@ -78,7 +78,15 @@ export default function AddictionTracker() {
   // Handle daily check-in
   const handleCheckIn = async (category) => {
     try {
-      const response = await api.post("/api/addiction/checkin", { category });
+      const response = await axios.post(
+        `${import.meta.env.VITE_HOST}/api/addiction/checkin`,
+        { category },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
       if (response.data.status === "success") {
         setAddictions(response.data.data.addictions);
 
@@ -97,7 +105,15 @@ export default function AddictionTracker() {
   // Add new addiction category
   const handleAddAddiction = async (category) => {
     try {
-      const response = await api.post("/api/addiction/add", { category });
+      const response = await axios.post(
+        `${import.meta.env.VITE_HOST}/api/addiction/add`,
+        { category },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
       if (response.data.status === "success") {
         setAddictions(response.data.data.addictions);
         setSelectedCategory(category);
@@ -119,9 +135,15 @@ export default function AddictionTracker() {
       )
     ) {
       try {
-        const response = await api.delete("/api/addiction/remove", {
-          data: { category },
-        });
+        const response = await axios.delete(
+          `${import.meta.env.VITE_HOST}/api/addiction/remove`,
+          {
+            data: { category },
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        );
 
         if (response.data.status === "success") {
           const updatedAddictions = addictions.filter(
@@ -153,7 +175,15 @@ export default function AddictionTracker() {
   const handleReset = async (category) => {
     if (window.confirm("هل أنت متأكد من إعادة تعيين التقدم؟")) {
       try {
-        const response = await api.post("/api/addiction/reset", { category });
+        const response = await api.post(
+          `${import.meta.env.VITE_HOST}/api/addiction/reset`,
+          { category },
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        );
         if (response.data.status === "success") {
           setAddictions((prev) =>
             prev.map((a) =>
@@ -303,7 +333,25 @@ export default function AddictionTracker() {
           </div>
         )}
 
-        {selectedCategory && getCurrentAddiction() && (
+        {addictions.length === 0 ? (
+          <div className="flex flex-col items-center justify-center p-12 bg-white rounded-lg shadow-lg">
+            <p className="text-gray-500 text-lg mb-4">
+              لم يتم إضافة أي نوع من الإدمان بعد
+            </p>
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="px-6 py-2 bg-emerald-700 text-white rounded-md hover:bg-emerald-800 transition-colors"
+            >
+              + إضافة نوع جديد
+            </button>
+          </div>
+        ) : !selectedCategory ? (
+          <div className="flex flex-col items-center justify-center p-12 bg-white rounded-lg shadow-lg">
+            <p className="text-gray-500 text-lg mb-4">
+              الرجاء اختيار نوع الإدمان للبدء
+            </p>
+          </div>
+        ) : (
           <>
             <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
               <div className="flex justify-between items-center mb-6">

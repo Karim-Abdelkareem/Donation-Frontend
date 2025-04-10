@@ -25,8 +25,6 @@ function App() {
   useEffect(() => {
     const controlNavbar = () => {
       const currentScrollY = window.scrollY;
-      console.log(currentScrollY);
-
       if (currentScrollY > lastScrollY) {
         setIsVisible(false);
       } else {
