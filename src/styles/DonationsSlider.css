@@ -5,7 +5,9 @@
 
 /* Custom Navigation Buttons for Donations Slider */
 .donations-next,
-.donations-prev {
+.donations-prev,
+.donate-prev,
+.donate-next {
   position: absolute;
   transform: translateY(-45%);
   width: 60px !important;
@@ -18,18 +20,22 @@
   border: none !important;
 }
 
-.donations-next {
+.donations-next,
+.donate-next {
   right: 0px !important;
   background: linear-gradient(to left, white 40%, transparent) !important;
 }
 
-.donations-prev {
+.donations-prev,
+.donate-prev {
   left: 0px !important;
   background: linear-gradient(to right, white 40%, transparent) !important;
 }
 
 .donations-next::after,
-.donations-prev::after {
+.donations-prev::after,
+.donate-prev::after,
+.donate-next::after {
   font-size: 18px;
   color: black !important;
 }

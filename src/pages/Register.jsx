@@ -11,18 +11,18 @@ export default function Register() {
     gender: "",
     password: "",
   });
-  const[loading,setLoading] = useState(false);
-  const[error,setError] = useState("");
-  let navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  let navigate = useNavigate();
 
-  async function register (formData) {
+  async function register(formData) {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_HOST}/api/auth/register`,
         formData
       );
-      
-      if(response.data.status==="success"){
+
+      if (response.data.status === "success") {
         navigate("/login");
         setLoading(false);
       }
@@ -47,24 +47,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row relative">
-      <img
-        className="absolute top-0 left-0 h-[115px] hidden md:block opacity-75 z-[2]"
-        src="https://ehsan.sa/ehsan-ui/images/snapel/snapel-line.svg"
-        alt=""
-      />
-      <img
-        className="absolute top-[115px] left-0 h-[115px] hidden md:block opacity-25 z-[1]"
-        src="https://ehsan.sa/ehsan-ui/images/snapel/snapel-line.svg"
-        alt=""
-      />
-      {/* Mint green background section */}
-      <div className="flex items-center justify-center w-full md:w-1/2 bg-[url('https://ehsan.sa/ehsan-ui/images/home/bg-statistics.svg')] bg-[#00493a] p-8 transition-all duration-500">
-        <img
-          className="filter brightness-0 invert saturate-0 hue-rotate-[212deg] brightness-[105%] contrast-[106%]"
-          src="https://ehsan.sa/ehsan-ui/images/ahseno-ayah.svg"
-          alt=""
-        />
-      </div>
+      <div className="flex items-center justify-center w-full md:w-1/2 bg-[url('https://ehsan.sa/ehsan-ui/images/home/bg-statistics.svg')] bg-indigo-800 p-8 transition-all duration-500"></div>
 
       {/* Form section */}
       <div className="w-full mt-32 md:w-1/2 p-8 flex items-center justify-center">
@@ -92,7 +75,7 @@ export default function Register() {
                   required
                   value={formData.username}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
@@ -110,11 +93,10 @@ export default function Register() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
-              
               <div>
                 <label
                   htmlFor="password"
@@ -129,7 +111,7 @@ export default function Register() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
@@ -147,7 +129,7 @@ export default function Register() {
                   required
                   value={formData.phone}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
@@ -167,7 +149,7 @@ export default function Register() {
                   max="100"
                   value={formData.age}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
@@ -184,7 +166,7 @@ export default function Register() {
                       value="male"
                       checked={formData.gender === "male"}
                       onChange={handleChange}
-                      className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300"
+                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
                     />
                     <label
                       htmlFor="male"
@@ -201,7 +183,7 @@ export default function Register() {
                       value="female"
                       checked={formData.gender === "female"}
                       onChange={handleChange}
-                      className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300"
+                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
                     />
                     <label
                       htmlFor="female"
@@ -217,7 +199,7 @@ export default function Register() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "جاري انشاء الحساب..." : "انشاء حساب"}
             </button>
@@ -225,7 +207,7 @@ export default function Register() {
               <p className="text-gray-700">لديك حساب بالفعل؟</p>
               <a
                 href="/login"
-                className="text-emerald-600 underline hover:text-emerald-700 mr-1"
+                className="text-indigo-600 underline hover:text-indigo-700 mr-1"
               >
                 تسجيل الدخول
               </a>

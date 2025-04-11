@@ -7,7 +7,9 @@ export default function Navbar() {
   const navLinks = [
     { path: "", label: "الرئيسية" },
     { path: "projects", label: "فرص التبرع" },
+    { path: "donations", label: "التبرعات" },
     { path: "services", label: "طلب تبرع" },
+    { path: "donate", label: "تقديم تبرع" },
     // { path: "addection", label: "معالجة الادمان" },
   ];
   const [search, setSearch] = useState(false);
@@ -15,9 +17,13 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="h-[72px] z-10 flex justify-between sticky top-0 bg-white items-center border-b border-gray-200">
-        <div className="px-6 flex gap-16 items-center">
-          <img loading="lazy" className="w-22" src="/logo.png" alt="" />
+      <nav className="h-[72px] z-30 shadow-md shadow-gray-10 flex justify-between sticky top-0 bg-white items-center border-b border-gray-200">
+        <div className="px-6 flex gap-3 items-center">
+          {/* <img loading="lazy" className="w-22" src="/logo.png" alt="" /> */}
+          <span className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+            Human bonding
+          </span>
+
           <div className="flex p-6 gap-2">
             {navLinks.map((link) => (
               <Link
@@ -25,7 +31,7 @@ export default function Navbar() {
                 to={link.path}
                 className={`group py-5 px-3 rounded-md relative transition-colors duration-300 ${
                   location.pathname.split("/")[1] === link.path
-                    ? "bg-[#007960] text-white"
+                    ? "bg-gradient-to-tr from-blue-500 to-purple-500 text-white"
                     : "hover:bg-gray-100"
                 }`}
               >
@@ -33,7 +39,7 @@ export default function Navbar() {
                 <div
                   className={`absolute left-1/2 bottom-1 h-1 w-[60px] rounded-full transition-all duration-300 transform -translate-x-1/2 ${
                     location.pathname.split("/")[1] === link.path
-                      ? "bg-[#80c8bb] opacity-100"
+                      ? "bg-[#818cf8] opacity-100"
                       : "opacity-0 group-hover:opacity-100 bg-gray-400"
                   }`}
                 ></div>
@@ -42,7 +48,7 @@ export default function Navbar() {
           </div>
         </div>
         <div className="flex gap-10 p-6">
-          <button
+          {/* <button
             className="cursor-pointer"
             onClick={() => {
               setSearch(!search);
@@ -52,13 +58,13 @@ export default function Navbar() {
               src="https://ehsan.sa/ehsan-ui/images/icons/search-icon.svg"
               alt=""
             />
-          </button>
+          </button> */}
           {isAuthenticated ? (
             <div className="flex gap-6 items-center">
               {user?.role === "admin" && (
                 <Link
                   to={"/dashboard"}
-                  className="text-[#007960] text-sm bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-md "
+                  className="text-[#6366f1] text-sm bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-md "
                 >
                   لوحة التحكم
                 </Link>
@@ -74,17 +80,30 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <Link
-              to={"/login"}
-              className="flex gap-2 bg-[#007960] hover:bg-[#00614d] text-white text-sm px-3 py-2 rounded-md"
-            >
-              <img
-                className="w-[14px]"
-                src="https://ehsan.sa/ehsan-ui/images/icons/user-icon.svg"
-                alt=""
-              />
-              <span>تسجيل الدخول</span>
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                to={"/login"}
+                className="flex gap-2 bg-[#6366f1] hover:bg-[#4f46e5] text-white text-sm px-3 py-2 rounded-md"
+              >
+                <img
+                  className="w-[14px]"
+                  src="https://ehsan.sa/ehsan-ui/images/icons/user-icon.svg"
+                  alt=""
+                />
+                <span>تسجيل الدخول</span>
+              </Link>
+              <Link
+                to={"/register"}
+                className="flex gap-2 bg-[#6366f1] hover:bg-[#4f46e5] text-white text-sm px-3 py-2 rounded-md"
+              >
+                <img
+                  className="w-[14px]"
+                  src="https://ehsan.sa/ehsan-ui/images/icons/user-icon.svg"
+                  alt=""
+                />
+                <span>انشئ حساب</span>
+              </Link>
+            </div>
           )}
         </div>
       </nav>
@@ -107,7 +126,7 @@ export default function Navbar() {
               placeholder="بحث"
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             />
-            <button className="px-3 py-2 text-[#007960] border border-[#007960] text-sm rounded-md">
+            <button className="px-3 py-2 text-[#6366f1] border border-[#6366f1] text-sm rounded-md">
               بحث
             </button>
           </div>

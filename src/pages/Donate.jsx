@@ -3,21 +3,11 @@ import { api } from "../services/api";
 import uploadToCloudinary from "../utils/cloudinary";
 import { toast } from "react-hot-toast";
 
-const categories = [
-  "مساعدات إنسانية",
-  "مساعدات طبية",
-  "مساعدات تعليمية",
-  "مساعدات غذائية",
-  "بناء مساجد",
-  "حفر آبار",
-];
-
-export default function Service() {
+export default function Donate() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    goalAmount: "",
-    category: "",
+    phone: "",
     proofImages: [],
   });
 
@@ -45,13 +35,13 @@ export default function Service() {
     const imageUrls = files.map((file) => URL.createObjectURL(file));
     setPreview((prev) => [...prev, ...imageUrls]);
 
-    // Clear input field to allow re-selection of the same files
+    // Clear input field
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   }, []);
 
-  // Cleanup Object URLs to prevent memory leaks
+  // Cleanup preview URLs
   useEffect(() => {
     return () => {
       preview.forEach((url) => URL.revokeObjectURL(url));
@@ -66,7 +56,6 @@ export default function Service() {
         (_, index) => index !== indexToRemove
       ),
     }));
-
     setPreview((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
@@ -77,7 +66,7 @@ export default function Service() {
     setError(null);
 
     try {
-      // Upload images to Cloudinary first
+      // Upload images to Cloudinary
       const imageUrls = await Promise.all(
         formData.proofImages.map(async (image) => {
           const cloudinaryUrl = await uploadToCloudinary(image);
@@ -85,34 +74,31 @@ export default function Service() {
         })
       );
 
-      // Create form data with Cloudinary URLs
-      const campaignData = {
+      // Create donation data
+      const donationData = {
         title: formData.title,
         description: formData.description,
-        goalAmount: formData.goalAmount,
-        category: formData.category,
+        phone: formData.phone,
         proofImages: imageUrls,
       };
 
-      const response = await api.post("/api/donation", campaignData);
+      const response = await api.post("/api/donate", donationData);
 
       if (response.data.status === "success") {
-        // Show success toast
-        toast.success("تم إنشاء الحملة بنجاح بأنتظار موافقة المشرفين!", {
+        toast.success("تم إرسال طلب التبرع بنجاح!", {
           duration: 3000,
           position: "top-center",
           style: {
-            background: "#4f46e5", // indigo-600
+            background: "#6366f1",
             color: "#fff",
           },
         });
 
-        // Reset form and previews
+        // Reset form
         setFormData({
           title: "",
           description: "",
-          goalAmount: "",
-          category: "",
+          phone: "",
           proofImages: [],
         });
         setPreview([]);
@@ -131,7 +117,7 @@ export default function Service() {
   return (
     <div className="mt-20 mx-auto max-w-4xl p-6">
       <h1 className="text-3xl font-bold text-center text-indigo-600 mb-8">
-        إنشاء حملة تبرع جديدة
+        تقديم تبرع جديد
       </h1>
 
       {error && (
@@ -143,7 +129,7 @@ export default function Service() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block text-gray-700 font-semibold mb-2">
-            عنوان الحملة
+            عنوان الطلب
           </label>
           <input
             type="text"
@@ -157,7 +143,7 @@ export default function Service() {
 
         <div>
           <label className="block text-gray-700 font-semibold mb-2">
-            وصف الحملة
+            وصف الطلب
           </label>
           <textarea
             name="description"
@@ -171,42 +157,21 @@ export default function Service() {
 
         <div>
           <label className="block text-gray-700 font-semibold mb-2">
-            المبلغ المستهدف
+            رقم الهاتف
           </label>
           <input
-            type="number"
-            name="goalAmount"
-            value={formData.goalAmount}
+            type="tel"
+            name="phone"
+            value={formData.phone}
             onChange={handleChange}
             required
-            min="0"
             className="w-full p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
         <div>
           <label className="block text-gray-700 font-semibold mb-2">
-            التصنيف
-          </label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            <option value="">اختر التصنيف</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-gray-700 font-semibold mb-2">
-            صور إثباتية
+            صور التبرع
           </label>
           <input
             ref={fileInputRef}
@@ -241,9 +206,9 @@ export default function Service() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50"
+          className="w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 disabled:opacity-50 transition-colors duration-200"
         >
-          {loading ? "جاري الإنشاء..." : "إنشاء الحملة"}
+          {loading ? "جاري الإرسال..." : "إرسال الطلب"}
         </button>
       </form>
     </div>

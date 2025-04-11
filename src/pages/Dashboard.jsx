@@ -6,17 +6,23 @@ import { FaCheck, FaEye, FaRegEdit, FaTrash } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 
+// Add Spinner component at the top of the file after imports
+const Spinner = () => (
+  <div className="flex justify-center items-center h-screen">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-600"></div>
+  </div>
+);
+
 export default function Dashboard() {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState(null);
-  const [filter, setFilter] = useState("all"); // Add filter state
+  const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const campaignsPerPage = 20;
 
-  // Fetch campaigns
   const fetchCampaigns = async () => {
     try {
       const response = await axios.get(
@@ -38,7 +44,6 @@ export default function Dashboard() {
     }
   };
 
-  // Delete campaign
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
@@ -49,8 +54,6 @@ export default function Dashboard() {
           },
         }
       );
-      console.log(response);
-
       if (response.status === 204) {
         setCampaigns(campaigns.filter((campaign) => campaign._id !== id));
         toast.success("تم حذف الحملة بنجاح");
@@ -61,7 +64,6 @@ export default function Dashboard() {
     }
   };
 
-  //Activate campaign
   const handleActivate = async (id) => {
     try {
       const response = await axios.patch(
@@ -80,7 +82,12 @@ export default function Dashboard() {
             : campaign
         );
         setCampaigns(updatedCampaigns);
-        toast.success("تمت التفعيل بنجاح");
+        toast.success("تم التفعيل بنجاح", {
+          style: {
+            background: "#4f46e5",
+            color: "#fff",
+          },
+        });
         fetchCampaigns();
       }
     } catch (err) {
@@ -88,7 +95,6 @@ export default function Dashboard() {
     }
   };
 
-  //Deactivate campaign
   const handleDeactivate = async (id) => {
     try {
       const response = await axios.patch(
@@ -100,8 +106,6 @@ export default function Dashboard() {
           },
         }
       );
-      console.log(response);
-
       if (response.data.status === "success") {
         const updatedCampaigns = campaigns.map((campaign) =>
           campaign._id === id
@@ -113,8 +117,6 @@ export default function Dashboard() {
         fetchCampaigns();
       }
     } catch (err) {
-      console.log(err);
-
       toast.error(err.response?.data?.message || "فشل في تعطيل الحملة");
     }
   };
@@ -123,7 +125,6 @@ export default function Dashboard() {
     fetchCampaigns();
   }, []);
 
-  // Get filtered campaigns
   const getFilteredCampaigns = () => {
     switch (filter) {
       case "active":
@@ -135,7 +136,6 @@ export default function Dashboard() {
     }
   };
 
-  // Get paginated campaigns
   const getPaginatedCampaigns = () => {
     const filteredCampaigns = getFilteredCampaigns();
     const indexOfLastCampaign = currentPage * campaignsPerPage;
@@ -148,34 +148,19 @@ export default function Dashboard() {
   );
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-700"></div>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (error) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-red-500">{error}</div>
-      </div>
-    );
+    return <div>{error}</div>;
   }
 
   return (
-    <div className="p-8">
+    <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-emerald-700">حملات التبرع</h1>
-        <Link
-          to="/services"
-          className="bg-emerald-700 text-white px-4 py-2 rounded-md hover:bg-emerald-800"
-        >
-          إنشاء حملة جديدة
-        </Link>
+        <h1 className="text-2xl font-bold text-indigo-600">حملات التبرع</h1>
       </div>
 
-      {/* Add Filter Bar */}
       <div className="mb-6 flex gap-4">
         <button
           onClick={() => {
@@ -184,11 +169,11 @@ export default function Dashboard() {
           }}
           className={`px-4 py-2 rounded-md ${
             filter === "all"
-              ? "bg-emerald-700 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
-          جميع الحملات
+          الكل
         </button>
         <button
           onClick={() => {
@@ -197,11 +182,11 @@ export default function Dashboard() {
           }}
           className={`px-4 py-2 rounded-md ${
             filter === "active"
-              ? "bg-emerald-700 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
-          الحملات النشطة
+          المفعلة
         </button>
         <button
           onClick={() => {
@@ -210,112 +195,110 @@ export default function Dashboard() {
           }}
           className={`px-4 py-2 rounded-md ${
             filter === "inactive"
-              ? "bg-emerald-700 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
-          الحملات المعلقة
+          المعلقة
         </button>
       </div>
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
-          <thead className="bg-emerald-700 text-white">
+          <thead className="bg-indigo-600 text-white">
             <tr>
               <th className="px-4 py-2 text-right">#</th>
-              <th className="py-3 px-4 text-right"></th>
-              <th className="py-3 px-4 text-right">العنوان</th>
-              <th className="py-3 px-4 text-right">التصنيف</th>
-              <th className="py-3 px-4 text-right">المبلغ المستهدف</th>
-              <th className="py-3 px-4 text-right">المبلغ الحالي</th>
-              <th className="py-3 px-4 text-right">الحالة</th>
-              <th className="py-3 px-4 text-right">الإجراءات</th>
+              <th className="px-4 py-2 text-right">الصورة</th>
+              <th className="px-4 py-2 text-right">العنوان</th>
+              <th className="px-4 py-2 text-right">التصنيف</th>
+              <th className="px-4 py-2 text-right">المبلغ المستهدف</th>
+              <th className="px-4 py-2 text-right">المبلغ الحالي</th>
+              <th className="px-4 py-2 text-right">الحالة</th>
+              <th className="px-4 py-2 text-right">الإجراءات</th>
             </tr>
           </thead>
           <tbody>
-            {getPaginatedCampaigns().map((campaign, i) => (
-              <React.Fragment key={campaign._id}>
-                <tr className="border-b hover:bg-gray-50">
-                  <td className="py-4 px-4">{i + 1}</td>
-                  <td className="py-4 px-4">
-                    <img
-                      className="w-16 h-16 rounded-md"
-                      src={campaign.proofImages[0]}
-                      alt=""
-                    />
-                  </td>
-                  <td className="py-4 px-4">{campaign.title}</td>
-                  <td className="py-4 px-4">{campaign.category}</td>
-                  <td className="py-4 px-4">{campaign.goalAmount} ج.م</td>
-                  <td className="py-4 px-4">{campaign.currentAmount} ج.م</td>
-                  <td className="py-4 px-4">
-                    <div
-                      className={`${
-                        campaign.status === "active"
-                          ? "bg-green-500"
-                          : "bg-red-600"
-                      } w-fit p-2 font-medium text-xs rounded-md text-white`}
-                    >
-                      {campaign.status === "active" ? "نشطة" : "معلقة"}
-                    </div>
-                  </td>
-                  <td className="py-4">
-                    <div className="flex gap-2">
-                      <Link
-                        to={`/edit-campaign/${campaign._id}`}
-                        className="bg-emerald-600 text-white p-2 rounded-md hover:bg-emerald-700"
-                      >
-                        <FaRegEdit className="text-xl" />
-                      </Link>
-                      <button
-                        onClick={() => setSelectedCampaignId(campaign._id)}
-                        className="bg-red-500 text-white py-2 px-3 rounded-md hover:bg-red-600"
-                      >
-                        <FaTrash />
-                      </button>
-                      {campaign.status === "active" ? (
-                        <button
-                          onClick={() => {
-                            handleDeactivate(campaign._id);
-                          }}
-                          className="bg-red-500 text-white py-2 px-3 rounded-md hover:bg-red-600"
-                        >
-                          <RxCross2 />
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            handleActivate(campaign._id);
-                          }}
-                          className="bg-green-500 text-white py-2 px-3 rounded-md hover:bg-green-600"
-                        >
-                          <FaCheck />
-                        </button>
-                      )}
-                      <button className="text-black py-2 px-3 rounded-md bg-gray-200 hover:bg-gray-300">
-                        <Link to={`/projects/${campaign._id}`}>
-                          <FaEye />
-                        </Link>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                {selectedCampaignId === campaign._id && (
-                  <Dialog
-                    campaign={campaign}
-                    setOpen={(isOpen) => {
-                      if (!isOpen) setSelectedCampaignId(null);
-                    }}
-                    onDelete={handleDelete}
+            {getPaginatedCampaigns().map((campaign, index) => (
+              <tr key={campaign._id} className="border-b hover:bg-gray-50">
+                {console.log(campaign)}
+                <td className="px-4 py-2">{index + 1}</td>
+                <td className="px-4 py-2">
+                  <img
+                    className="w-10 h-10 rounded object-cover"
+                    src={campaign.proofImages[0]}
+                    alt=""
                   />
-                )}
-              </React.Fragment>
+                </td>
+                <td className="px-4 py-2">{campaign.title}</td>
+                <td className="px-4 py-2">{campaign.category}</td>
+                <td className="px-4 py-2">{campaign.goalAmount} ج.م</td>
+                <td className="px-4 py-2">{campaign.currentAmount} ج.م</td>
+                <td className="px-4 py-2">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs ${
+                      campaign.status === "active"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
+                    }`}
+                  >
+                    {campaign.status === "active" ? "نشطة" : "معلقة"}
+                  </span>
+                </td>
+                <td className="px-4 py-2">
+                  <div className="flex gap-2">
+                    {campaign.status === "active" ? (
+                      <button
+                        onClick={() => handleDeactivate(campaign._id)}
+                        className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600"
+                        title="تعليق"
+                      >
+                        <RxCross2 className="text-sm" />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleActivate(campaign._id)}
+                        className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600"
+                        title="تفعيل"
+                      >
+                        <FaCheck className="text-sm" />
+                      </button>
+                    )}
+                    <Link
+                      to={`/edit-campaign/${campaign._id}`}
+                      className="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700"
+                      title="تعديل"
+                    >
+                      <FaRegEdit className="text-sm" />
+                    </Link>
+                    <button
+                      onClick={() => setSelectedCampaignId(campaign._id)}
+                      className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
+                      title="حذف"
+                    >
+                      <FaTrash className="text-sm" />
+                    </button>
+                    <Link
+                      to={`/projects/${campaign._id}`}
+                      className="bg-gray-100 text-gray-700 p-2 rounded-md hover:bg-gray-200"
+                      title="عرض"
+                    >
+                      <FaEye className="text-sm" />
+                    </Link>
+                  </div>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Add Pagination */}
+      {getFilteredCampaigns().length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          لا توجد حملات{" "}
+          {filter === "active" ? "نشطة" : filter === "inactive" ? "معلقة" : ""}
+        </div>
+      )}
+
       <div className="mt-6 flex justify-center gap-2">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -325,24 +308,36 @@ export default function Dashboard() {
           السابق
         </button>
         <div className="flex items-center px-4">
-          صفحة {currentPage} من {totalPages}
+          صفحة {currentPage} من{" "}
+          {Math.ceil(getFilteredCampaigns().length / campaignsPerPage)}
         </div>
         <button
           onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            setCurrentPage((prev) =>
+              Math.min(
+                prev + 1,
+                Math.ceil(getFilteredCampaigns().length / campaignsPerPage)
+              )
+            )
           }
-          disabled={currentPage === totalPages}
+          disabled={
+            currentPage ===
+            Math.ceil(getFilteredCampaigns().length / campaignsPerPage)
+          }
           className="px-4 py-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50"
         >
           التالي
         </button>
       </div>
 
-      {getFilteredCampaigns().length === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          لا توجد حملات{" "}
-          {filter === "active" ? "نشطة" : filter === "inactive" ? "معلقة" : ""}
-        </div>
+      {selectedCampaignId && (
+        <Dialog
+          campaign={campaigns.find((c) => c._id === selectedCampaignId)}
+          setOpen={(isOpen) => {
+            if (!isOpen) setSelectedCampaignId(null);
+          }}
+          onDelete={handleDelete}
+        />
       )}
     </div>
   );
@@ -357,16 +352,16 @@ function Dialog({ campaign, setOpen, onDelete }) {
   return (
     <div className="fixed inset-0 z-50">
       <div
-        className="fixed inset-0 bg-[#6a728224] opacity-50"
+        className="fixed inset-0 bg-gray-500 bg-opacity-50"
         onClick={() => setOpen(false)}
       />
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg z-60">
-        <h2 className="text-2xl font-bold mb-4">تأكيد الحذف</h2>
+        <h2 className="text-2xl font-bold mb-4 text-indigo-600">تأكيد الحذف</h2>
         <p className="mb-6">هل أنت متأكد أنك تريد حذف هذه الحملة؟</p>
         <div className="flex justify-end gap-6">
           <button
             onClick={() => setOpen(false)}
-            className="bg-gray-300 cursor-pointer text-gray-700 px-4 py-2 rounded-md mr-2"
+            className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300"
           >
             إلغاء
           </button>

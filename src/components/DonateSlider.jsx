@@ -8,11 +8,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "../styles/DonationsSlider.css";
 
-import DonationCard from "./DonationCard";
 import { Link } from "react-router";
 import { api } from "../services/api";
+import DonateCard from "./DonateCard";
 
-export default function DonationsSlider() {
+export default function DonateSlider() {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -20,7 +20,7 @@ export default function DonationsSlider() {
   const fetchCampaigns = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/api/donation`);
+      const response = await api.get(`/api/donate`);
       if (response.data.status === "success") {
         setCampaigns(response.data.data.campaigns);
         setLoading(false);
@@ -67,7 +67,7 @@ export default function DonationsSlider() {
 
   return (
     <div className="relative px-4">
-      <SliderNavButtons prevClass="donations-prev" nextClass="donations-next" />
+      <SliderNavButtons prevClass="donate-prev" nextClass="donate-next" />
       <Swiper
         dir="rtl"
         modules={[Navigation]}
@@ -75,8 +75,8 @@ export default function DonationsSlider() {
         spaceBetween={10}
         grabCursor={true}
         navigation={{
-          nextEl: ".donations-prev",
-          prevEl: ".donations-next",
+          nextEl: ".donate-prev",
+          prevEl: ".donate-next",
         }}
         breakpoints={{
           320: { slidesPerView: 1, spaceBetween: 10 },
@@ -88,12 +88,12 @@ export default function DonationsSlider() {
       >
         {campaigns.map((campaign, index) => (
           <SwiperSlide key={index}>
-            <DonationCard campaign={campaign} />
+            <DonateCard campaign={campaign} />
           </SwiperSlide>
         ))}
       </Swiper>
       <div className="my-16 flex justify-center items-center">
-        <Link to={"/projects"}>
+        <Link to={"/donations"}>
           <button className="px-6 py-3 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-sm hover:shadow">
             المزيد من الفرص
           </button>

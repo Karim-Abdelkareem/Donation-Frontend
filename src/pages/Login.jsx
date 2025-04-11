@@ -22,24 +22,8 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row relative">
-      <img
-        className="absolute top-0 left-0 h-[115px] hidden md:block opacity-75 z-[2]"
-        src="https://ehsan.sa/ehsan-ui/images/snapel/snapel-line.svg"
-        alt=""
-      />
-      <img
-        className="absolute top-28 left-0 h-[115px] hidden md:block opacity-25 z-[2]"
-        src="https://ehsan.sa/ehsan-ui/images/snapel/snapel-line.svg"
-        alt=""
-      />
-      {/* Mint green background section */}
-      <div className="flex items-center justify-center w-full md:w-1/2 bg-[url('https://ehsan.sa/ehsan-ui/images/home/bg-statistics.svg')] bg-[#00493a] p-8 transition-all duration-500 z-1">
-        <img
-          className="filter brightness-0 invert saturate-0 hue-rotate-[212deg] brightness-[105%] contrast-[106%]"
-          src="https://ehsan.sa/ehsan-ui/images/ahseno-ayah.svg"
-          alt=""
-        />
-      </div>
+
+      <div className="flex items-center justify-center w-full md:w-1/2 bg-[url('https://ehsan.sa/ehsan-ui/images/home/bg-statistics.svg')] bg-indigo-800 p-8 transition-all duration-500 z-1"></div>
 
       {/* Form section */}
       <div className="w-full md:w-1/2 p-8 flex items-center justify-center">
@@ -67,7 +51,7 @@ export default function Login() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
@@ -85,7 +69,7 @@ export default function Login() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
             </div>
@@ -93,7 +77,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "تسجيل الدخول..." : "تسجيل الدخول"}
             </button>
@@ -101,7 +85,7 @@ export default function Login() {
               <p className="text-gray-700">ليس لديك حساب؟</p>
               <a
                 href="/register"
-                className="text-emerald-600 underline hover:text-emerald-700"
+                className="text-indigo-600 underline hover:text-indigo-700"
               >
                 انشاء حساب
               </a>

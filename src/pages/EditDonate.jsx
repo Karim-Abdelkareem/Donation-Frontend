@@ -3,26 +3,14 @@ import { useParams, useNavigate } from "react-router";
 import { api } from "../services/api";
 import uploadToCloudinary from "../utils/cloudinary";
 import { toast } from "react-hot-toast";
-import axios from "axios";
 
-const categories = [
-  "مساعدات إنسانية",
-  "مساعدات طبية",
-  "مساعدات تعليمية",
-  "مساعدات غذائية",
-  "بناء مساجد",
-  "حفر آبار",
-];
-
-export default function EditCampaign() {
+export default function EditDonate() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    goalAmount: "",
-    currentAmount: "",
-    category: "",
+    phone: "",
     proofImages: [],
   });
 
@@ -31,45 +19,39 @@ export default function EditCampaign() {
   const [preview, setPreview] = useState([]);
   const fileInputRef = useRef(null);
 
-  // Fetch campaign data
+  // Fetch donate data
   useEffect(() => {
-    const fetchCampaign = async () => {
+    const fetchDonate = async () => {
       try {
-        const response = await api.get(`/api/donation/${id}`);
-        console.log(response);
-
-        const campaign = response.data.data.campaign;
+        const response = await api.get(`/api/donate/${id}`);
+        const donate = response.data.data.campaign;
         setFormData({
-          title: campaign.title,
-          description: campaign.description,
-          goalAmount: campaign.goalAmount,
-          currentAmount: campaign.currentAmount,
-          status: campaign.status,
-          category: campaign.category,
+          title: donate.title,
+          description: donate.description,
+          phone: donate.phone,
+          status: donate.status,
           proofImages: [],
         });
         // Set initial preview images
-        if (campaign.proofImages) {
-          setPreview(campaign.proofImages);
+        if (donate.proofImages) {
+          setPreview(donate.proofImages);
         }
         setLoading(false);
       } catch (err) {
-        console.log(err);
-        
-        toast.error("Failed to fetch campaign details");
-        // navigate("/dashboard");
+        toast.error("Failed to fetch donate details");
+        // navigate("/");
       }
     };
-    fetchCampaign();
+    fetchDonate();
   }, [id, navigate]);
 
-  // Handle Input Changes
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle Image Selection
+  // Handle image selection
   const handleImageChange = useCallback((e) => {
     const files = Array.from(e.target.files);
 
@@ -78,7 +60,6 @@ export default function EditCampaign() {
       proofImages: [...prev.proofImages, ...files],
     }));
 
-    // Create preview URLs for new files
     const imageUrls = files.map((file) => URL.createObjectURL(file));
     setPreview((prev) => [...prev, ...imageUrls]);
 
@@ -87,7 +68,7 @@ export default function EditCampaign() {
     }
   }, []);
 
-  // Cleanup Object URLs
+  // Cleanup object URLs
   useEffect(() => {
     return () => {
       preview.forEach((url) => {
@@ -109,7 +90,7 @@ export default function EditCampaign() {
     setPreview((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
-  // Handle Form Submission
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -133,32 +114,22 @@ export default function EditCampaign() {
       const updateData = {
         title: formData.title,
         description: formData.description,
-        goalAmount: formData.goalAmount,
-        currentAmount: formData.currentAmount,
-        category: formData.category,
+        phone: formData.phone,
         proofImages: allImageUrls,
       };
 
-      const response = await axios.patch(
-        `https://donations-backend-ten.vercel.app/api/donation/${id}`,
-        updateData,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      const response = await api.patch(`/api/donate/${id}`, updateData);
 
       if (response.data.status === "success") {
-        toast.success("تم تحديث الحملة بنجاح!", {
+        toast.success("تم تحديث طلب التبرع بنجاح!", {
           duration: 3000,
           position: "top-center",
           style: {
-            background: "#4f46e5", // indigo-600
+            background: "#4f46e5",
             color: "#fff",
           },
         });
-        navigate("/dashboard");
+        navigate("/dashboard/donates");
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "حدث خطأ ما", {
@@ -171,7 +142,6 @@ export default function EditCampaign() {
     }
   };
 
-  // Update loading state UI
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -183,7 +153,7 @@ export default function EditCampaign() {
   return (
     <div className="mt-20 mx-auto max-w-4xl p-6">
       <h1 className="text-3xl font-bold text-center text-indigo-600 mb-8">
-        تعديل حملة التبرع
+        تعديل طلب التبرع
       </h1>
 
       {/* Status Badge */}
@@ -195,7 +165,7 @@ export default function EditCampaign() {
               : "bg-red-100 text-red-800 border-red-200"
           } px-4 py-2 rounded-full border text-sm font-medium`}
         >
-          {formData.status === "active" ? "حملة نشطة" : "حملة معلقة"}
+          {formData.status === "active" ? "طلب نشط" : "طلب معلق"}
         </div>
       </div>
 
@@ -208,10 +178,9 @@ export default function EditCampaign() {
       {/* Form with background */}
       <div className="bg-gray-50 rounded-lg shadow-sm p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Input fields with updated focus styles */}
           <div>
             <label className="block text-gray-700 font-semibold mb-2">
-              عنوان الحملة
+              عنوان الطلب
             </label>
             <input
               type="text"
@@ -225,7 +194,7 @@ export default function EditCampaign() {
 
           <div>
             <label className="block text-gray-700 font-semibold mb-2">
-              وصف الحملة
+              وصف الطلب
             </label>
             <textarea
               name="description"
@@ -239,52 +208,16 @@ export default function EditCampaign() {
 
           <div>
             <label className="block text-gray-700 font-semibold mb-2">
-              المبلغ المستهدف
+              رقم الهاتف
             </label>
             <input
-              type="number"
-              name="goalAmount"
-              value={formData.goalAmount}
+              type="tel"
+              name="phone"
+              value={formData.phone}
               onChange={handleChange}
               required
-              min="0"
               className="w-full p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              المبلغ الحالي
-            </label>
-            <input
-              type="number"
-              name="currentAmount"
-              value={formData.currentAmount}
-              onChange={handleChange}
-              required
-              min="0"
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              التصنيف
-            </label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <option value="">اختر التصنيف</option>
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
           </div>
 
           <div>
@@ -324,7 +257,7 @@ export default function EditCampaign() {
           <div className="flex gap-4">
             <button
               type="button"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/dashboard/donates")}
               className="w-1/2 bg-gray-500 text-white py-3 rounded-md hover:bg-gray-600 disabled:opacity-50"
             >
               إلغاء
@@ -332,9 +265,9 @@ export default function EditCampaign() {
             <button
               type="submit"
               disabled={loading}
-              className="w-1/2 bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50"
+              className="w-1/2 bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 disabled:opacity-50"
             >
-              {loading ? "جاري التحديث..." : "تحديث الحملة"}
+              {loading ? "جاري التحديث..." : "تحديث الطلب"}
             </button>
           </div>
         </form>

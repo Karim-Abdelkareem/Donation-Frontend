@@ -16,6 +16,12 @@ import AdminProtected from "./components/AdminProtected";
 import Addection from "./pages/Addection";
 import { BiSupport } from "react-icons/bi";
 import { useEffect, useState } from "react";
+import Donate from "./pages/Donate";
+import DashboardLayout from "./components/DashboardLayout";
+import DonatesDashboard from "./pages/DonatesDashboard";
+import Donations from "./pages/Donations";
+import EditDonate from "./pages/EditDonate";
+import DonateDetails from "./pages/DonateDetails";
 
 function App() {
   const location = useLocation();
@@ -49,7 +55,7 @@ function App() {
             location.pathname === "/addection" ? "hidden" : "block"
           } fixed bottom-4 right-4 z-20`}
         >
-          <div className="flex items-center text-white justify-center p-3  rounded-full bg-[#003d6b] cursor-pointer hover:bg-blue-950 transition-all duration-300">
+          <div className="flex items-center text-white justify-center p-3  rounded-full bg-indigo-600 cursor-pointer hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-950 transition-all duration-300">
             <BiSupport className="text-2xl text-white" />
             <p
               className={`whitespace-nowrap overflow-hidden transition-all duration-500 ${
@@ -74,6 +80,9 @@ function App() {
               </Protected>
             }
           />
+          <Route path="/donations" element={<Donations />} />
+          <Route path="/donate" element={<Donate />} />
+          <Route path="/donate/:id" element={<DonateDetails />} />
           <Route
             path="/addection"
             element={
@@ -83,19 +92,23 @@ function App() {
             }
           />
           {/* Admins Routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <AdminProtected>
-                <Dashboard />
-              </AdminProtected>
-            }
-          />
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route path="donations" element={<Dashboard />} />
+            <Route path="donates" element={<DonatesDashboard />} />
+          </Route>
           <Route
             path="/edit-campaign/:id"
             element={
               <AdminProtected>
                 <EditCampaign />
+              </AdminProtected>
+            }
+          />
+          <Route
+            path="/edit-donate/:id"
+            element={
+              <AdminProtected>
+                <EditDonate />
               </AdminProtected>
             }
           />
