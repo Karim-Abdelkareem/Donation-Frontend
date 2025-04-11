@@ -137,7 +137,7 @@ export default function AiChat({ currentAddiction, streak }) {
   return (
     <div>
       <button onClick={() => setOpen(!open)}>
-        <div className="cursor-pointer flex items-center justify-center fixed bottom-4 right-4 rounded-full w-12 h-12 bg-emerald-700 animate-pulse">
+        <div className="cursor-pointer flex items-center justify-center fixed bottom-4 right-4 rounded-full w-12 h-12 bg-indigo-600 hover:bg-indigo-700 animate-pulse">
           <IoChatbubbleEllipsesOutline className="text-2xl text-white" />
         </div>
       </button>

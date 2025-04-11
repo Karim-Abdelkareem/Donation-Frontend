@@ -7,6 +7,17 @@ import AiChat from "../components/AiChat";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 
+// Constants at the top of the file
+const THEME = {
+  primary: "indigo-600",
+  primaryHover: "indigo-700",
+  secondary: "purple-600",
+  accent: "indigo-100",
+  success: "indigo-600",
+  danger: "red-600",
+  background: "indigo-50",
+};
+
 const ADDICTION_CATEGORIES = [
   { id: "smoking", label: "التدخين", defaultTarget: 30 },
   { id: "alcohol", label: "الكحول", defaultTarget: 90 },
@@ -212,7 +223,7 @@ export default function AddictionTracker() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-700"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
@@ -226,7 +237,7 @@ export default function AddictionTracker() {
         streak={getCurrentAddiction()?.streak || 0}
       />
       <div className="max-w-4xl mx-auto p-6 mt-20">
-        <h1 className="text-3xl font-bold text-center text-emerald-700 mb-8">
+        <h1 className="text-3xl font-bold text-center text-indigo-600 mb-8">
           تتبع التعافي
         </h1>
 
@@ -241,8 +252,8 @@ export default function AddictionTracker() {
                 }}
                 className={`px-4 py-2 rounded-md ${
                   selectedCategory === addiction.category
-                    ? "bg-emerald-700 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "bg-indigo-600 text-white"
+                    : "bg-indigo-100 text-gray-700 hover:bg-indigo-200"
                 }`}
               >
                 {
@@ -256,7 +267,7 @@ export default function AddictionTracker() {
             {addictions.length < ADDICTION_CATEGORIES.length && (
               <button
                 onClick={() => setShowAddForm(true)}
-                className="px-4 py-2 rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                className="px-4 py-2 rounded-md bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
               >
                 + إضافة
               </button>
@@ -264,7 +275,7 @@ export default function AddictionTracker() {
             {addictions.length > 0 && (
               <button
                 onClick={() => setShowRemoveForm(true)}
-                className="px-4 py-2 rounded-md bg-red-100 text-red-700 hover:bg-red-200"
+                className="px-4 py-2 rounded-md bg-red-100 text-red-600 hover:bg-red-200"
               >
                 - إزالة
               </button>
@@ -340,7 +351,7 @@ export default function AddictionTracker() {
             </p>
             <button
               onClick={() => setShowAddForm(true)}
-              className="px-6 py-2 bg-emerald-700 text-white rounded-md hover:bg-emerald-800 transition-colors"
+              className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
             >
               + إضافة نوع جديد
             </button>
@@ -353,12 +364,12 @@ export default function AddictionTracker() {
           </div>
         ) : (
           <>
-            <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border border-indigo-100">
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <div className="text-lg font-semibold">
                     أيام متتالية:{" "}
-                    <span className="text-emerald-600">
+                    <span className="text-indigo-600">
                       {getCurrentAddiction().streak}
                     </span>
                   </div>
@@ -376,13 +387,13 @@ export default function AddictionTracker() {
                         "yyyy-MM-dd"
                       ) === format(new Date(), "yyyy-MM-dd")
                     }
-                    className="bg-emerald-700 text-white px-4 py-2 rounded-md hover:bg-emerald-800 disabled:opacity-50"
+                    className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     تسجيل اليوم
                   </button>
                   <button
                     onClick={() => handleReset(selectedCategory)}
-                    className="bg-red-100 text-red-700 px-4 py-2 rounded-md hover:bg-red-200"
+                    className="bg-red-100 text-red-600 px-4 py-2 rounded-md hover:bg-red-200"
                   >
                     إعادة تعيين
                   </button>
@@ -399,7 +410,7 @@ export default function AddictionTracker() {
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2.5">
                   <div
-                    className="bg-emerald-600 h-2.5 rounded-full"
+                    className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
                     style={{
                       width: `${calculateProgress(getCurrentAddiction())}%`,
                     }}
@@ -415,7 +426,7 @@ export default function AddictionTracker() {
                       key={index}
                       className={`aspect-square rounded-lg flex items-center justify-center text-sm font-medium ${
                         day.isChecked
-                          ? "bg-emerald-100 text-emerald-800 border-2 border-emerald-500"
+                          ? "bg-indigo-100 text-indigo-800 border-2 border-indigo-500"
                           : "bg-gray-100 text-gray-500"
                       }`}
                     >
@@ -428,35 +439,37 @@ export default function AddictionTracker() {
 
             {/* Achievements and Notes */}
             <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-xl font-bold mb-4">إنجازاتك</h2>
+              <div className="bg-white rounded-lg shadow-lg p-6 border border-indigo-100">
+                <h2 className="text-xl font-bold mb-4 text-indigo-800">
+                  إنجازاتك
+                </h2>
                 <div className="space-y-4">
                   {getCurrentAddiction().streak >= 1 && (
-                    <div className="flex items-center gap-2 text-emerald-700">
+                    <div className="flex items-center gap-2 text-indigo-600">
                       <span className="text-2xl">🌟</span>
                       <span>أول يوم من التعافي!</span>
                     </div>
                   )}
                   {getCurrentAddiction().streak >= 7 && (
-                    <div className="flex items-center gap-2 text-emerald-700">
+                    <div className="flex items-center gap-2 text-indigo-600">
                       <span className="text-2xl">🎉</span>
                       <span>أسبوع من التعافي!</span>
                     </div>
                   )}
                   {getCurrentAddiction().streak >= 30 && (
-                    <div className="flex items-center gap-2 text-emerald-700">
+                    <div className="flex items-center gap-2 text-indigo-600">
                       <span className="text-2xl">🏆</span>
                       <span>شهر من التعافي!</span>
                     </div>
                   )}
                   {getCurrentAddiction().streak >= 90 && (
-                    <div className="flex items-center gap-2 text-emerald-700">
+                    <div className="flex items-center gap-2 text-indigo-600">
                       <span className="text-2xl">💪</span>
                       <span>3 أشهر من التعافي!</span>
                     </div>
                   )}
                   {calculateProgress(getCurrentAddiction()) >= 100 && (
-                    <div className="flex items-center gap-2 text-emerald-700 font-bold">
+                    <div className="flex items-center gap-2 text-indigo-600 font-bold">
                       <span className="text-2xl">🎯</span>
                       <span>وصلت إلى هدفك!</span>
                     </div>
