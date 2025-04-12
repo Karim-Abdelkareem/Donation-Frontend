@@ -25,6 +25,7 @@ import DonateDetails from "./pages/DonateDetails";
 import ConfirmEmail from "./pages/ConfirmEmail";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Footer from "./components/Footer";
 
 function App() {
   const location = useLocation();
@@ -84,7 +85,14 @@ function App() {
             }
           />
           <Route path="/donations" element={<Donations />} />
-          <Route path="/donate" element={<Donate />} />
+          <Route
+            path="/donate"
+            element={
+              <Protected>
+                <Donate />
+              </Protected>
+            }
+          />
           <Route path="/donate/:id" element={<DonateDetails />} />
           <Route
             path="/addection"
@@ -119,6 +127,7 @@ function App() {
             }
           />
         </Routes>
+        <Footer />
       </AuthProvider>
     </>
   );

@@ -125,46 +125,6 @@ export default function Home() {
           <DonateSlider />
         </motion.div>
       </div>
-
-      {/* New Section */}
-      <div ref={bannerTwoRef} className="bg-[#f8f9fa] mt-64 py-4">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={bTwoIsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
-        >
-          <div className="flex items-center justify-center pt-4 pb-2">
-            <h1 className="text-[#6366f1] text-2xl font-bold">من أثر عطائكم</h1>
-          </div>
-          <p className="text-gray-400 text-center">
-            أثر يغير الحياة، وسعادة تنمو لعطاء مستمر
-          </p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={bTwoIsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.4 }}
-        >
-          <div className="flex flex-col items-start mx-auto w-1/3 py-10">
-            <div className="text-center space-y-3">
-              <h1 className="text-3xl font-bold">
-                نحن نعمل معكم لتحسين حياة الآخرين
-              </h1>
-              <p className="text-[#6366f1] font-medium">
-                مستفيد من مشروع دعم التبرعات
-              </p>
-            </div>
-            <div className="flex items-center gap-4 pt-10 mx-auto">
-              <div className="bg-[#eef2ff] text-[#6366f1] border border-[#6366f1] rounded-md px-3 py-1 text-sm">
-                121,250+مستفيد
-              </div>
-              <div className="bg-[#eef2ff] text-[#6366f1] border border-[#6366f1] rounded-md px-3 py-1 text-sm">
-                54,587,555 ج.م
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
     </div>
   );
 }
