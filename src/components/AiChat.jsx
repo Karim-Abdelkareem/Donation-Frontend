@@ -147,7 +147,7 @@ export default function AiChat({ currentAddiction, streak }) {
         } overflow-hidden w-72 h-96 bottom-4 right-4 border border-gray-200 bg-gray-50 rounded-md`}
       >
         <div className="w-full flex items-center justify-between p-3 bg-white h-10">
-          <div className="text-sm font-medium text-emerald-700">
+          <div className="text-sm font-medium text-indigo-700">
             {currentAddiction.label} - {streak} يوم
           </div>
           <button onClick={() => setOpen(false)}>
@@ -170,7 +170,7 @@ export default function AiChat({ currentAddiction, streak }) {
               <div
                 className={`max-w-[80%] rounded-lg p-3 break-words ${
                   msg.sender === "user"
-                    ? "bg-emerald-700 text-white rounded-br-none"
+                    ? "bg-indigo-700 text-white rounded-br-none"
                     : "bg-white text-gray-800 rounded-bl-none"
                 }`}
               >
@@ -197,7 +197,7 @@ export default function AiChat({ currentAddiction, streak }) {
         <div className="absolute flex items-center gap-2 bottom-0 w-full p-2 bg-gray-50 border-t">
           <button
             onClick={handleSend}
-            className="bg-emerald-700 hover:bg-emerald-800 border border-emerald-500 rounded text-white px-3 py-2"
+            className="bg-indigo-700 hover:bg-indigo-800 border border-indigo-500 rounded text-white px-3 py-2"
           >
             <IoIosSend />
           </button>
@@ -207,7 +207,7 @@ export default function AiChat({ currentAddiction, streak }) {
             onKeyDown={handleKeyPress}
             placeholder="اكتب رسالتك..."
             rows={1}
-            className="w-full text-sm p-2 rounded border border-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 bg-white resize-none"
+            className="w-full text-sm p-2 rounded border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-emerald-500 bg-white resize-none"
           />
         </div>
       </div>

@@ -22,6 +22,9 @@ import DonatesDashboard from "./pages/DonatesDashboard";
 import Donations from "./pages/Donations";
 import EditDonate from "./pages/EditDonate";
 import DonateDetails from "./pages/DonateDetails";
+import ConfirmEmail from "./pages/ConfirmEmail";
+import ForgetPassword from "./pages/ForgetPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const location = useLocation();
@@ -91,6 +94,9 @@ function App() {
               </Protected>
             }
           />
+          <Route path="/confirm-email/:token" element={<ConfirmEmail />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           {/* Admins Routes */}
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route path="donations" element={<Dashboard />} />

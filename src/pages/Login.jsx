@@ -22,7 +22,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row relative">
-
       <div className="flex items-center justify-center w-full md:w-1/2 bg-[url('https://ehsan.sa/ehsan-ui/images/home/bg-statistics.svg')] bg-indigo-800 p-8 transition-all duration-500 z-1"></div>
 
       {/* Form section */}
@@ -88,6 +87,15 @@ export default function Login() {
                 className="text-indigo-600 underline hover:text-indigo-700"
               >
                 انشاء حساب
+              </a>
+            </div>
+            <div className="text-sm flex items-center justify-center">
+              <p className="text-gray-700">هل نسيت كلمة السر؟</p>
+              <a
+                href="/forget-password"
+                className="text-indigo-600 underline hover:text-indigo-700"
+              >
+                استرجاع كلمة السر
               </a>
             </div>
           </form>
