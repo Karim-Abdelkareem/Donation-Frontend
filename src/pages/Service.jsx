@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import { api } from "../services/api";
 import uploadToCloudinary from "../utils/cloudinary";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const categories = [
   "مساعدات إنسانية",
@@ -94,7 +95,11 @@ export default function Service() {
         proofImages: imageUrls,
       };
 
-      const response = await api.post("/api/donation", campaignData);
+      const response = await axios.post(`${import.meta.env.VITE_HOST}/api/donation`, campaignData,{
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        }
+      });
 
       if (response.data.status === "success") {
         // Show success toast

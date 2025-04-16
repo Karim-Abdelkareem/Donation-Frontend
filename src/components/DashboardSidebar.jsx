@@ -10,15 +10,15 @@ export default function DashboardSidebar() {
   return (
     <div
       className={`${
-        isExpanded ? "w-64" : "w-20"
-      } h-screen bg-gray-50 border-l rounded-md border-gray-200 fixed right-0 transition-all duration-300 ease-in-out`}
+        isExpanded ? "w-20 lg:w-64" : "w-20"
+      } h-screen bg-gray-50 border-l rounded-md border-gray-200 relative right-0 transition-all duration-300 ease-in-out`}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
       <div className="flex flex-col h-full">
         <div className="p-6">
           <h1
-            className={`text-xl font-bold text-indigo-600 whitespace-nowrap overflow-hidden transition-all duration-300 ${
+            className={`hidden lg:block text-xl font-bold text-indigo-600 whitespace-nowrap overflow-hidden transition-all duration-300 ${
               !isExpanded && "scale-0"
             }`}
           >
@@ -37,7 +37,7 @@ export default function DashboardSidebar() {
           >
             <IoMdListBox className="text-xl" />
             <span
-              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+              className={`hidden lg:block whitespace-nowrap overflow-hidden transition-all duration-300 ${
                 !isExpanded && "w-0"
               }`}
             >
@@ -55,7 +55,7 @@ export default function DashboardSidebar() {
           >
             <MdVolunteerActivism className="text-xl" />
             <span
-              className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${
+              className={`hidden lg:block whitespace-nowrap overflow-hidden transition-all duration-300 ${
                 !isExpanded && "w-0"
               }`}
             >

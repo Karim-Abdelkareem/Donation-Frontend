@@ -165,21 +165,29 @@ export default function ProjectDetails() {
 
             {/* Amounts */}
             <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
-              <h2 className="text-lg font-semibold text-indigo-600">المبالغ</h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <p className="font-bold text-gray-900">تم جمع:</p>
-                  <p className="text-sm font-medium text-gray-900">
-                    {campaign.currentAmount}{" "}
-                    <span className="text-gray-600">ج.م</span>
-                  </p>
+                  <h2 className="text-lg font-semibold text-indigo-600">
+                    المبالغ
+                  </h2>
+                  <div className="space-y-2">
+                    <p className="font-bold text-gray-900">المبلغ المستهدف</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {campaign.goalAmount}{" "}
+                      <span className="text-gray-600">ج.م</span>
+                    </p>
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <p className="font-bold text-gray-900">المبلغ المستهدف:</p>
-                  <p className="text-sm font-medium text-gray-900">
-                    {campaign.goalAmount}{" "}
-                    <span className="text-gray-600">ج.م</span>
-                  </p>
+                  <h2 className="text-lg font-semibold text-indigo-600">
+                    معلومات إضافية
+                  </h2>
+                  <div className="space-y-2">
+                    <p className="font-bold text-gray-900">التصنيف:</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {campaign.category}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -191,32 +199,8 @@ export default function ProjectDetails() {
                 {campaign.description}
               </p>
             </div>
-
-            {/* Additional Info */}
-            <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
-              <h2 className="text-lg font-semibold text-indigo-600">
-                معلومات إضافية
-              </h2>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <p className="font-bold text-gray-900">عدد المستفيدين:</p>
-                  <p className="text-sm font-medium text-gray-900">6 مستفيد</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="font-bold text-gray-900">نوع المستفيد:</p>
-                  <p className="text-sm font-medium text-gray-900">المواطنون</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="font-bold text-gray-900">التصنيف:</p>
-                  <p className="text-sm font-medium text-gray-900">
-                    {campaign.category}
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Date Information */}
-            <div className="bg-indigo-200/50 border border-indigo-300/50 text-indigo-900/800 p-6 rounded-lg shadow-md space-y-4">
+            <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
               <div className="flex gap-2 items-center text-sm font-medium text-gray-600">
                 <p>تاريخ بداية الحملة:</p>
                 <p>

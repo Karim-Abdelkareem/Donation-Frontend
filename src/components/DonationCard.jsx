@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router";
 
 export default function DonationCard({ campaign }) {
+  
   const donationPercent = Math.round(
-    (campaign.currentAmount / campaign.goalAmount) * 100
+    ((campaign.currentAmount||0) / campaign.goalAmount) * 100
   );
 
   return (
@@ -42,15 +43,9 @@ export default function DonationCard({ campaign }) {
       </div>
 
       <div className="flex justify-between bg-gray-50 rounded-lg p-4">
-        <div className="flex flex-col space-y-1">
-          <p className="text-indigo-600 text-sm font-semibold">تم جمع</p>
-          <p className="text-sm font-medium text-gray-900">
-            {campaign.currentAmount} <span className="text-gray-600">ج.م</span>
-          </p>
-        </div>
-        <div className="flex flex-col space-y-1">
+        <div className="flex  space-x-3">
           <p className="text-indigo-600 text-sm font-semibold">
-            المبلغ المستهدف
+            المبلغ المستهدف:
           </p>
           <p className="text-sm font-medium text-gray-900">
             {campaign.goalAmount} <span className="text-gray-600">ج.م</span>

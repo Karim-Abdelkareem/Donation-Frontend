@@ -11,7 +11,7 @@ export default function DashboardLayout() {
   return (
     <div className="flex">
       <DashboardSidebar />
-      <div className="flex-1 mr-16 transition-all duration-300">
+      <div className="flex-1 lg:mr-16 transition-all duration-300">
         <main className="p-8">
           <Outlet />
         </main>

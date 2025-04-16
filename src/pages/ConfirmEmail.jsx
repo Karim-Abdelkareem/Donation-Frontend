@@ -11,7 +11,7 @@ export default function ConfirmEmail() {
   async function confirmEmail() {
     setLoading(true);
     const response = await axios.post(
-      `https://donations-backend-ten.vercel.app/api/auth/confirm-email/${token}`
+      `${import.meta.env.VITE_HOST}/api/auth/confirm-email/${token}`
     );
     console.log(response);
     if (response.data.status === "success") {

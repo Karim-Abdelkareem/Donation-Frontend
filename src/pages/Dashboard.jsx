@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { api } from "../services/api";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router";
 import { FaCheck, FaEye, FaRegEdit, FaTrash } from "react-icons/fa";
@@ -17,7 +16,6 @@ export default function Dashboard() {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [open, setOpen] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState(null);
   const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +24,7 @@ export default function Dashboard() {
   const fetchCampaigns = async () => {
     try {
       const response = await axios.get(
-        "https://donations-backend-ten.vercel.app/api/donation/admin",
+        `${import.meta.env.VITE_HOST}/api/donation/admin`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -47,7 +45,7 @@ export default function Dashboard() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `https://donations-backend-ten.vercel.app/api/donation/${id}`,
+        `${import.meta.env.VITE_HOST}/api/donation/${id}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -67,7 +65,7 @@ export default function Dashboard() {
   const handleActivate = async (id) => {
     try {
       const response = await axios.patch(
-        `https://donations-backend-ten.vercel.app/api/donation/${id}/activate`,
+        `${import.meta.env.VITE_HOST}/api/donation/${id}/activate`,
         {},
         {
           headers: {
@@ -98,7 +96,7 @@ export default function Dashboard() {
   const handleDeactivate = async (id) => {
     try {
       const response = await axios.patch(
-        `https://donations-backend-ten.vercel.app/api/donation/${id}/deactivate`,
+        `${import.meta.env.VITE_HOST}/api/donation/${id}/deactivate`,
         {},
         {
           headers: {
@@ -204,7 +202,7 @@ export default function Dashboard() {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
+        <table className="hidden lg:table min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
           <thead className="bg-indigo-600 text-white">
             <tr>
               <th className="px-4 py-2 text-right">#</th>
@@ -220,7 +218,6 @@ export default function Dashboard() {
           <tbody>
             {getPaginatedCampaigns().map((campaign, index) => (
               <tr key={campaign._id} className="border-b hover:bg-gray-50">
-                {console.log(campaign)}
                 <td className="px-4 py-2">{index + 1}</td>
                 <td className="px-4 py-2">
                   <img
@@ -291,6 +288,79 @@ export default function Dashboard() {
           </tbody>
         </table>
       </div>
+      <div className="lg:hidden space-y-4">
+        {getPaginatedCampaigns().map((campaign, index) => (
+          <div key={campaign._id} className="bg-white p-4 rounded shadow-md">
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-lg font-bold text-indigo-600">
+                {campaign.title}
+              </h2>
+              <span
+                className={`px-2 py-1 rounded-full text-xs ${
+                  campaign.status === "active"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                }`}
+              >
+                {campaign.status === "active" ? "نشطة" : "معلقة"}
+              </span>
+            </div>
+
+            <img
+              src={campaign.proofImages[0]}
+              alt="campaign"
+              className="w-full h-40 object-cover rounded mb-3"
+            />
+
+            <div className="text-sm text-gray-700 space-y-1">
+              <p>التصنيف: {campaign.category}</p>
+              <p>المبلغ المستهدف: {campaign.goalAmount} ج.م</p>
+              <p>المبلغ الحالي: {campaign.currentAmount} ج.م</p>
+            </div>
+
+            <div className="flex gap-2 mt-4">
+              {campaign.status === "active" ? (
+                <button
+                  onClick={() => handleDeactivate(campaign._id)}
+                  className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600"
+                  title="تعليق"
+                >
+                  <RxCross2 className="text-sm" />
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleActivate(campaign._id)}
+                  className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600"
+                  title="تفعيل"
+                >
+                  <FaCheck className="text-sm" />
+                </button>
+              )}
+              <Link
+                to={`/edit-campaign/${campaign._id}`}
+                className="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700"
+                title="تعديل"
+              >
+                <FaRegEdit className="text-sm" />
+              </Link>
+              <button
+                onClick={() => setSelectedCampaignId(campaign._id)}
+                className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
+                title="حذف"
+              >
+                <FaTrash className="text-sm" />
+              </button>
+              <Link
+                to={`/projects/${campaign._id}`}
+                className="bg-gray-100 text-gray-700 p-2 rounded-md hover:bg-gray-200"
+                title="عرض"
+              >
+                <FaEye className="text-sm" />
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {getFilteredCampaigns().length === 0 && (
         <div className="text-center py-8 text-gray-500">
@@ -307,7 +377,7 @@ export default function Dashboard() {
         >
           السابق
         </button>
-        <div className="flex items-center px-4">
+        <div className="flex text-xs lg:text-base items-center px-4">
           صفحة {currentPage} من{" "}
           {Math.ceil(getFilteredCampaigns().length / campaignsPerPage)}
         </div>
@@ -376,3 +446,14 @@ function Dialog({ campaign, setOpen, onDelete }) {
     </div>
   );
 }
+
+/**
+ * مكون لوحة التحكم
+ *
+ * لوحة تحكم المشرف الرئيسية لإدارة حملات التبرع
+ * المميزات:
+ * - عرض قائمة بجميع الحملات مع التصفح
+ * - تصفية الحملات حسب الحالة (نشط/غير نشط)
+ * - الإجراءات: تفعيل/تعطيل، تعديل، حذف الحملات
+ * - حالات التحميل ومعالجة الأخطاء
+ */

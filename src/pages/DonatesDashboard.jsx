@@ -25,7 +25,7 @@ export default function DonatesDashboard() {
   const fetchDonates = async () => {
     try {
       const response = await axios.get(
-        "https://donations-backend-ten.vercel.app/api/donate/admin",
+        `${import.meta.env.VITE_HOST}/api/donate/admin`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -48,7 +48,7 @@ export default function DonatesDashboard() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `https://donations-backend-ten.vercel.app/api/donate/${id}`,
+        `${import.meta.env.VITE_HOST}/api/donate/${id}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -67,7 +67,7 @@ export default function DonatesDashboard() {
   const handleActivate = async (id) => {
     try {
       const response = await axios.patch(
-        `https://donations-backend-ten.vercel.app/api/donate/${id}/activate`,
+        `${import.meta.env.VITE_HOST}/api/donate/${id}/activate`,
         {},
         {
           headers: {
@@ -91,7 +91,7 @@ export default function DonatesDashboard() {
   const handleDeactivate = async (id) => {
     try {
       const response = await axios.patch(
-        `https://donations-backend-ten.vercel.app/api/donate/${id}/deactivate`,
+        `${import.meta.env.VITE_HOST}/api/donate/${id}/deactivate`,
         {},
         {
           headers: {
@@ -178,7 +178,7 @@ export default function DonatesDashboard() {
       </div>
 
       {/* Donates table */}
-      <div className="overflow-x-auto">
+      <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
           <thead className="bg-indigo-600 text-white">
             <tr>
@@ -272,6 +272,83 @@ export default function DonatesDashboard() {
         </table>
       </div>
 
+      <div className="block md:hidden space-y-4">
+        {getPaginatedDonates()?.map((donate, index) => (
+          <div
+            key={donate._id}
+            className="bg-white rounded-lg shadow-md p-4 border border-gray-100"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="font-bold text-indigo-600">{donate.title}</h2>
+              <span
+                className={`px-2 py-1 rounded-full text-xs ${
+                  donate.status === "active"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                }`}
+              >
+                {donate.status === "active" ? "مفعل" : "معلق"}
+              </span>
+            </div>
+            <div className="flex flex-col gap-4 items-center mb-2">
+              <img
+                src={donate.proofImages[0]}
+                alt=""
+                className="object-cover rounded"
+              />
+              <p className="text-gray-700 line-clamp-3">{donate.description}</p>
+            </div>
+            <div className="text-sm text-gray-600 mb-2">
+              رقم الهاتف: {donate.phone}
+            </div>
+            <div className="flex gap-2 flex-wrap justify-start">
+              {donate.status === "inactive" ? (
+                <button
+                  onClick={() => handleActivate(donate._id)}
+                  className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600"
+                  title="تفعيل"
+                >
+                  <FaCheck className="text-sm" />
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleDeactivate(donate._id)}
+                  className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600"
+                  title="تعليق"
+                >
+                  <RxCross2 className="text-sm" />
+                </button>
+              )}
+              <Link
+                to={`/edit-donate/${donate._id}`}
+                className="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700"
+                title="تعديل"
+              >
+                <FaRegEdit className="text-sm" />
+              </Link>
+              <button
+                onClick={() => window.open(`/donate/${donate._id}`, "_blank")}
+                className="bg-gray-100 text-gray-700 p-2 rounded-md hover:bg-gray-200"
+                title="عرض"
+              >
+                <FaEye className="text-sm" />
+              </button>
+              <button
+                onClick={() => {
+                  if (window.confirm("هل أنت متأكد من حذف هذا الطلب؟")) {
+                    handleDelete(donate._id);
+                  }
+                }}
+                className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
+                title="حذف"
+              >
+                <FaTrash className="text-sm" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
       {getFilteredDonates().length === 0 && (
         <div className="text-center py-8 text-gray-500">
           لا توجد طلبات{" "}
@@ -287,7 +364,7 @@ export default function DonatesDashboard() {
         >
           السابق
         </button>
-        <div className="flex items-center px-4">
+        <div className="flex items-center text-xs lg:text-base px-4">
           صفحة {currentPage} من{" "}
           {Math.ceil(getFilteredDonates().length / donatesPerPage)}
         </div>

@@ -82,7 +82,11 @@ export default function Donate() {
         proofImages: imageUrls,
       };
 
-      const response = await api.post("/api/donate", donationData);
+      const response = await api.post(`${import.meta.env.VITE_HOST}/api/donate`, donationData,{
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      });
 
       if (response.data.status === "success") {
         toast.success("تم إرسال طلب التبرع بنجاح!", {
