@@ -35,7 +35,7 @@ export default function ResetPassword() {
 
     setLoading(true);
     try {
-      await axios.post(`https://donations-backend-ten.vercel.app/api/auth/reset-password/${token}`, {
+      await axios.post(`${import.meta.env.VITE_HOST}/api/auth/reset-password/${token}`, {
         password: formData.password,
       });
       

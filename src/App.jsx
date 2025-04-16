@@ -26,6 +26,7 @@ import ConfirmEmail from "./pages/ConfirmEmail";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Footer from "./components/Footer";
+import MyDonations from "./pages/MyDonations";
 
 function App() {
   const location = useLocation();
@@ -99,6 +100,14 @@ function App() {
             element={
               <Protected>
                 <Addection />
+              </Protected>
+            }
+          />
+          <Route
+            path="/my-donations"
+            element={
+              <Protected>
+                <MyDonations />
               </Protected>
             }
           />

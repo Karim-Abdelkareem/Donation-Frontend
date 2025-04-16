@@ -140,7 +140,7 @@ export default function EditCampaign() {
       };
 
       const response = await axios.patch(
-        `https://donations-backend-ten.vercel.app/api/donation/${id}`,
+        `${import.meta.env.VITE_HOST}/api/donation/${id}`,
         updateData,
         {
           headers: {

@@ -45,8 +45,8 @@ export default function Donations() {
   }
 
   return (
-    <div className="mt-20">
-      <div className="mx-24 text-xs flex gap-1 items-center font-medium">
+    <div className="mt-10 lg:mt-20">
+      <div className="mx-10 lg:mx-24 text-xs flex gap-1 items-center font-medium">
         <Link to="/" className="hover:text-indigo-600 transition-colors">
           الرئيسية
         </Link>
@@ -66,7 +66,7 @@ export default function Donations() {
         <p className="text-gray-400">تبرع</p>
       </div>
 
-      <h1 className="my-12 mx-20 text-4xl text-indigo-600 font-bold">
+      <h1 className="my-12 mx-10 lg:mx-20 text-4xl text-indigo-600 font-bold">
         التبرعات{" "}
       </h1>
 

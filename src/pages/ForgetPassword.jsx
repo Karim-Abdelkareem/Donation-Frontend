@@ -11,7 +11,7 @@ export default function ForgetPassword() {
     setLoading(true);
 
     try {
-      await axios.post("https://donations-backend-ten.vercel.app/api/auth/forget-password", {
+      await axios.post(`${import.meta.env.VITE_HOST}/api/auth/forget-password`, {
         email,
       });
       toast.success(
